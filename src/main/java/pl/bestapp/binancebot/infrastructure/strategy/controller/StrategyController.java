@@ -7,6 +7,7 @@ import pl.bestapp.binancebot.infrastructure.strategy.domain.CommissionType;
 import pl.bestapp.binancebot.infrastructure.strategy.domain.Interval;
 import pl.bestapp.binancebot.infrastructure.strategy.domain.SellType;
 import pl.bestapp.binancebot.infrastructure.strategy.domain.Strategy;
+import pl.bestapp.binancebot.infrastructure.strategy.service.StrategyService;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -18,23 +19,29 @@ import java.util.List;
 @RestController
 public class StrategyController {
 
+    private final StrategyService strategyService;
+
+    public StrategyController(StrategyService strategyService) {
+        this.strategyService = strategyService;
+    }
+
     @GetMapping("/{id}")
     public Strategy getStrategy(String id) {
-        return new Strategy(5, Interval.ONE_DAY, SellType.PURCHASE_PRICE, CommissionType.VALUE, 4.5, 5.5, 10.0, 15, 20.0);
+        return strategyService.get("1");
     }
 
     @GetMapping("/all")
     public List<Strategy> getStrategies() {
-        return Collections.singletonList(new Strategy(5, Interval.ONE_DAY, SellType.PURCHASE_PRICE, CommissionType.VALUE, 4.5, 5.5, 10.0, 15, 20.0));
+        return null;
     }
 
     @PostMapping("/")
-    public void addStrategy(Strategy Strategy) {
-        /* todo */
+    public void addStrategy(@RequestBody Strategy strategy) {
+        strategyService.save(strategy, "1");
     }
 
     @PutMapping("/")
-    public void updateStrategy(Strategy Strategy) {
+    public void updateStrategy(@RequestBody Strategy Strategy) {
         /* todo */
     }
 }
