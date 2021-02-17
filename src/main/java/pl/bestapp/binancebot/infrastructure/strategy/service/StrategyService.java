@@ -7,16 +7,13 @@ import org.ta4j.core.analysis.criteria.AverageProfitableTradesCriterion;
 import org.ta4j.core.analysis.criteria.RewardRiskRatioCriterion;
 import org.ta4j.core.analysis.criteria.TotalProfitCriterion;
 import org.ta4j.core.analysis.criteria.VersusBuyAndHoldCriterion;
-import org.ta4j.core.indicators.EMAIndicator;
-import org.ta4j.core.indicators.MACDIndicator;
-import org.ta4j.core.indicators.RSIIndicator;
-import org.ta4j.core.indicators.SMAIndicator;
+import org.ta4j.core.indicators.*;
 import org.ta4j.core.indicators.helpers.ClosePriceIndicator;
+import org.ta4j.core.indicators.helpers.VolumeIndicator;
+import org.ta4j.core.indicators.pivotpoints.PivotPointIndicator;
+import org.ta4j.core.indicators.pivotpoints.TimeLevel;
 import org.ta4j.core.num.Num;
-import org.ta4j.core.trading.rules.CrossedDownIndicatorRule;
-import org.ta4j.core.trading.rules.CrossedUpIndicatorRule;
-import org.ta4j.core.trading.rules.StopGainRule;
-import org.ta4j.core.trading.rules.StopLossRule;
+import org.ta4j.core.trading.rules.*;
 import pl.bestapp.binancebot.client.BinanceApiRestClient;
 import pl.bestapp.binancebot.client.domain.market.Candlestick;
 import pl.bestapp.binancebot.client.domain.market.CandlestickInterval;
@@ -84,6 +81,35 @@ public class StrategyService {
         * */
         SMAIndicator shortSma = new SMAIndicator(closePrice, 5);
         SMAIndicator longSma = new SMAIndicator(closePrice, 30);
+
+        EMAIndicator shortEMA = new EMAIndicator(closePrice, 5);
+        EMAIndicator longEMA = new EMAIndicator(closePrice, 30);
+
+        System.out.println("5-ticks-EMAIndicator value at the 42nd index: " + shortEMA.getValue(42).doubleValue());
+        System.out.println("30-ticks-EMAIndicator value at the 42nd index: " + longEMA.getValue(42).doubleValue());
+
+        VolumeIndicator volumeIndicator = new VolumeIndicator(series, 30);
+        System.out.println("30-ticks-VolumeIndicator value at the 42nd index: " + volumeIndicator.getValue(42).doubleValue());
+        System.out.println("30-ticks-VolumeIndicator value at the 40nd index: " + volumeIndicator.getValue(40).doubleValue());
+
+        RSIIndicator shortRSI = new RSIIndicator(closePrice, 5);
+        RSIIndicator longRSI = new RSIIndicator(closePrice, 30);
+
+        System.out.println("5-ticks-shortRSI value at the 42nd index: " + shortRSI.getValue(42).doubleValue());
+        System.out.println("30-ticks-longRSI value at the 42nd index: " + longRSI.getValue(42).doubleValue());
+
+        PivotPointIndicator pivotPointIndicator = new PivotPointIndicator(series, TimeLevel.DAY);
+        System.out.println("30-ticks-pivotPointIndicator value at the 42nd index: " + pivotPointIndicator.getValue(42).doubleValue());
+
+        ATRIndicator atrIndicator = new ATRIndicator(series, 14);
+        System.out.println("30-ticks-atrIndicator value at the 42nd index: " + atrIndicator.getValue(42).doubleValue());
+
+
+
+
+        Rule atrRule = new IsHighestRule(atrIndicator, 14);
+
+
 
 
         //rulsy do kupowania
