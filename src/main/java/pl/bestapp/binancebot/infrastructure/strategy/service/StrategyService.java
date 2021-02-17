@@ -66,16 +66,30 @@ public class StrategyService {
         }
 
 
+        /*TODO **********************************************************************************************************************
+        *  Przyklad z tej strony:
+        * https://ta4j.github.io/ta4j-wiki/Getting-started.html
+        *
+        *
+        * */
         ClosePriceIndicator closePrice = new ClosePriceIndicator(series);
 
-        // Getting the simple moving average (SMA) of the close price over the last 5 ticks
-        SMAIndicator shortSma = new SMAIndicator(closePrice, 5);
 
+        /*
+        * TODO *************************************************************************************************************************
+        * Tutaj jest cala dokumentacja wskaznikow:
+        * https://oss.sonatype.org/service/local/repositories/releases/archive/org/ta4j/ta4j-core/0.11/ta4j-core-0.11-javadoc.jar/!/index.html
+        *
+        *
+        * */
+        SMAIndicator shortSma = new SMAIndicator(closePrice, 5);
         SMAIndicator longSma = new SMAIndicator(closePrice, 30);
 
 
+        //rulsy do kupowania
         Rule buyingRule = new CrossedUpIndicatorRule(shortSma, longSma).or(new CrossedDownIndicatorRule(closePrice, 50000d));
 
+        //rulsy do sprzedawania
         Rule sellingRule = new CrossedDownIndicatorRule(shortSma, longSma).or(new StopLossRule(closePrice, 3.0)).or(new StopGainRule(closePrice, 2.0));
 
         org.ta4j.core.Strategy strategy = new BaseStrategy(buyingRule, sellingRule);
@@ -84,9 +98,6 @@ public class StrategyService {
         BarSeriesManager manager = new BarSeriesManager(series);
         TradingRecord tradingRecord = manager.run(strategy);
         System.out.println("Number of trades for our strategy: " + tradingRecord.getTradeCount());
-
-
-
 
         // Getting the profitable trades ratio
         AnalysisCriterion profitTradesRatio = new AverageProfitableTradesCriterion();
