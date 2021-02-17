@@ -30,6 +30,11 @@ public class StrategyController {
         return strategyService.get("1");
     }
 
+    @GetMapping("/calculate")
+    public void calculate() {
+        strategyService.calculateStrategy();
+    }
+
     @GetMapping("/all")
     public List<Strategy> getStrategies() {
         return null;
